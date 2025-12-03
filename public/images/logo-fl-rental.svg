@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00A651"/>
+      <stop offset="100%" style="stop-color:#008C45"/>
+    </linearGradient>
+  </defs>
+  <!-- FL -->
+  <text x="5" y="38" font-family="Arial Black, sans-serif" font-size="36" font-weight="900" fill="url(#logoGradient)">FL</text>
+  <!-- Rental -->
+  <text x="60" y="38" font-family="Arial, sans-serif" font-size="28" font-weight="600" fill="#003366">Rental</text>
+</svg>
