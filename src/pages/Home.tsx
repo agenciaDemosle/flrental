@@ -5,9 +5,8 @@
 import HeroBanner from '@/components/sections/HeroBanner';
 import ArriendoSection from '@/components/sections/ArriendoSection';
 import CategoriesSection from '@/components/sections/CategoriesSection';
-import BlogSection from '@/components/sections/BlogSection';
+import ProductsSection from '@/components/sections/ProductsSection';
 import SolutionsSection from '@/components/sections/SolutionsSection';
-import NewsSection from '@/components/sections/NewsSection';
 
 export default function Home() {
   return (
@@ -21,14 +20,11 @@ export default function Home() {
       {/* Sección Categorías de Productos */}
       <CategoriesSection />
 
-      {/* Sección Nuestro Blog */}
-      <BlogSection />
+      {/* Sección Productos Destacados */}
+      <ProductsSection />
 
       {/* Sección Soluciones */}
       <SolutionsSection />
-
-      {/* Sección Noticias / Posts Destacados */}
-      <NewsSection />
     </>
   );
 }

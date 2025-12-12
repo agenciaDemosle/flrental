@@ -1,0 +1,26 @@
+CODIGO,Tipo de Equipo,Marca,Modelo,Capacidad / Carga Útil,Potencia (hp),Tracción,Transmisión,Origen,Notas Relevantes,Cantidad
+CAMFA1001,CAMIÓN TOLVA,Mercedes Benz,Actros 3336 K / Arocs 3342 K,15 m³ / 31.416-34.877 kg,389 / 415.253,6x4,Automatizada,Alemania,-,1
+CAMFA1002,CAMIÓN TOLVA,Mercedes Benz,Actros 4144 K / Arocs 4848 K,20 m³ / 39.074-38.467 kg,470 / 469.168,8x4,Automatizada,Alemania,Full Seguridad,2
+CAMFA1003,CAMIÓN ALJIBE,Mercedes Benz,Accelo 1016,5.000 lts.,168,4x2,Mecánica y Automatizada,Brasil,-,2
+CAMFA1004,CAMIÓN ALJIBE,Mercedes Benz,Axor 1824 / Atego 1729,10.000 lts.,257 / 309,4x2,Mecánica y Automatizada,Alemania,-,2
+CAMFA1005,CAMIÓN ALJIBE,Mercedes Benz,Actros 3336 K / Arocs 3342K,25.000 lts.,389 / 415.253,6x4,Automatizada,Alemania,"Aspersión desde cabina, Barra de Riego Trasera",1
+CAMFA1006,CAMIÓN ALJIBE,Mercedes Benz,Actros 4144 K / Arocs 4848 K,30.000 lts.,470 / 469.168,8x4,Automatizada,Alemania,"Aspersión desde cabina, Barra de Riego Trasera",2
+CAMFA1007,CAMIÓN LUBRICADOR,Mitsubishi / Mercedes Benz,Canter 815 / Accelo 1016,6.000 Kg (Capacidad Total),147.9,4x2,Mecánica y Automatizada,Japón / Brasil,"Cap. Aceite 300 lts, 3 Bombas Aceite + 1 Grasa",2
+CAMFA1008,CAMIÓN LUBRICADOR,Mercedes Benz,Axor 1824 / Atego 1729 KO48 AT Euro,10.000 Kg (Capacidad Total),N/A,4x2,Mecánica y Automatizada,N/A,"100x4 lts Aceites, 500 lts Residual/Grasa",2
+CAMFA1009,CAMIÓN LUBRICADOR MIXTO,Mercedes Benz,Accelo 1016,6.000 Kg (Capacidad Total),N/A,4x2,Mecánica y Automatizada,N/A,Estanque Combustible 3.000 lts,2
+CAMFA1010,CAMIÓN LUBRICADOR MIXTO,Mercedes Benz,Arocs 3340 / Arocs 3342,26.000 Kg (Capacidad Total),N/A,6x4,Automatizada,N/A,Estanque Combustible 7.500 lts,2
+CAMFA1011,CAMIÓN PLUMA,Mercedes Benz,Actros 3336 K / Arocs 3342,9-10 Ton,389 / 415,6x4,Automatizada,Alemania,"Modelo Grúa: Hiab 288/298/362, Control Remoto",2
+CAMFA1012,CAMIÓN PLUMA,Mercedes Benz,Actros 4144 K / Arocs 4848 K,12 Ton,470 / 514,8x4,Automatizada,Alemania,"Modelo Grúa: Hiab 477 / PK 48002, Control Remoto",2
+CAMFA1013,CAMIÓN PLUMA,Mercedes Benz,Arocs 4848 K,15 Ton,469,8x4,Automatizada,Alemania,"Modelo Grúa: Hiab 558, Control Remoto",2
+CAMFA1014,CAMIÓN PLUMA,Mercedes Benz,Arocs 4148 AK / 4848 K,18 Ton,514 / 469,8x8 / 8x4,Automatizada,Alemania,"Modelo Grúa: Hiab 858, Control Remoto",2
+CAMFA1015,TRACTO PLUMA,Mercedes Benz,Arocs 3240,12 Ton (Pluma),388,8x4,Automatizada,Alemania,Modelo Grúa: Hiab 477,2
+CAMFA1016,TRACTO PLUMA,Mercedes Benz,Arocs 3240,15 Ton (Pluma),388,8x4,Automatizada,Alemania,Modelo Grúa: Hiab 558,2
+CAMFA1017,CAMIÓN PLANO 3/4,Mitsubishi,Canter 815 / Canter 915,5.000 - 6.000 Kg,147.9,4x2,Mecánica,Japón,Largo Carrocería: 6.30 mts.,2
+CAMFA1018,CAMIÓN PLANO 3/4,Mercedes Benz,Accelo 1016,6.000 Kg,168,4x2,Mecánica,Brasil,Largo Carrocería: 6.30 mts.,2
+CAMFA1019,CAMIÓN PLANO 3/4,Mitsubishi,Fuso 615,3.345 Kg,147.9,4x4,Mecánica,Japón,Largo Carrocería: 4.50 mts.,2
+CAMFA1020,CAMIÓN TRACTO,Mercedes Benz,Actros 2644 / Actros 2645 S,N/A,470 / 485,6x4,Automatizada,Alemania,-,2
+CAMFA1021,CAMIÓN TRACTO,Mercedes Benz,New Actros 2658,N/A,624,6x4,Automatizada,Alemania,-,2
+CAMDG1022,CAMIÓN PLUMA,VOLVO,FMX420 ,14 Ton,,,Automatizada,,"Modelo Grúa: PM 38.5, Control Remoto",6
+CAMDG1023,CAMIÓN PLANO 3/4,HINO,FC 1118 ,8.000 Kg,,,Automatizada,,Freno Telma,4
+CAMDG1024,MINIBUS,Mercedes Benz,Sprinter 516,19+1,,4x4,Automatizada,,,9
+CAMDG1025,MINIBUS,Mercedes Benz,Sprinter 517,19+1,,4x4,Automatizada,,,3
