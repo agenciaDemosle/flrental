@@ -88,36 +88,33 @@ export const COPYS = {
   SECTION_SOLUTIONS_SUBTITLE: 'Soluciones en Arriendo y Venta de maquinaria pesada',
 } as const;
 
+// Información de la empresa
+export const COMPANY = {
+  legalName: 'INVERSIONES F&L SPA',
+  tradeName: 'FL Rental',
+  rut: '78.102.328-0',
+  giro: 'Arriendo de vehículos motorizados sin conductor. Arriendo de maquinaria sin operador, Transporte de Carga por Carretera.',
+} as const;
+
 // Sucursales / Cobertura
 export const BRANCHES = [
-  'Iquique',
-  'Calama',
   'Antofagasta',
-  'Copiapó',
-  'La Serena',
-  'Santiago',
-  'Rancagua',
-  'Talca',
-  'Concepción',
-  'Temuco',
-  'Puerto Montt',
 ] as const;
 
 // Contacto
 export const CONTACT = {
   phone: {
-    main: '+56 2 2585 9000',
+    main: '+56 9 2217 1978',
+    formatted: '+569 2217 1978',
   },
   email: {
     contacto: 'contacto@flrental.cl',
   },
-  whatsapp: '+56922222222',
-  address: 'Panamericana Norte 15800, Lampa. Santiago, Chile',
+  whatsapp: '+56922171978',
+  address: 'Uribe 636, Of. 302, C. de Negocios, Antofagasta',
+  horario: 'Lunes–Viernes 09:00–18:00',
   social: {
-    facebook: 'https://facebook.com/flrental',
-    youtube: 'https://youtube.com/flrental',
-    instagram: 'https://instagram.com/flrental',
-    linkedin: 'https://linkedin.com/company/flrental',
+    linkedin: '',
   },
 } as const;
 

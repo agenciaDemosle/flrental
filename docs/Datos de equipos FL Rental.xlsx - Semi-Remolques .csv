@@ -1,0 +1,5 @@
+CODIGO,Tipo de Equipo,Marca,Modelo,Capacidad Máxima,Ejes,Largo Útil,Notas Relevantes,cantidad
+SRFA3001,CAMA BAJA,Tremac,Cargo Fast,50 Ton,3,N/A,Cuello Desmontable,6
+SRFA3002,CAMA BAJA,Tremac,Cargo Fast,60 Ton,3,N/A,Cuello Desmontable,6
+SRFA3003,CAMA BAJA,Tremac,Cargo Fast,80 Ton,3,N/A,Cuello Desmontable,6
+SRFA3004,RAMPLA,Tremac,Semiremolque Plano,30 Ton,3,13.5 mts,12 Piñas para contenedores de 20 y 40 pies.,8
