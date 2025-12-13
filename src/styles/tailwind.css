@@ -73,6 +73,16 @@
     text-wrap: balance;
   }
 
+  /* Ocultar scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   @keyframes slide-in-right {
     from {
       transform: translateX(100%);

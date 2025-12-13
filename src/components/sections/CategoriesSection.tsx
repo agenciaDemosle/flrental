@@ -3,7 +3,7 @@
  * Muestra las categorías principales de productos desde WooCommerce
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, type WooCategory } from '@/services/woocommerce';
 import SectionTitle from '@/components/ui/SectionTitle';
@@ -133,6 +133,9 @@ function CategorySkeleton() {
 export default function CategoriesSection() {
   const [categories, setCategories] = useState<WooCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function loadCategories() {
@@ -153,6 +156,42 @@ export default function CategoriesSection() {
     loadCategories();
   }, []);
 
+  // Verificar scroll
+  const checkScroll = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      setCanScrollLeft(container.scrollLeft > 0);
+      setCanScrollRight(
+        container.scrollLeft < container.scrollWidth - container.clientWidth - 10
+      );
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [categories]);
+
+  // Funciones de navegación
+  const scroll = (direction: 'left' | 'right') => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const scrollAmount = container.clientWidth * 0.8;
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-surface">
       <div className="container mx-auto px-4">
@@ -167,41 +206,76 @@ export default function CategoriesSection() {
           las necesidades de tus proyectos de construcción, minería e industria.
         </p>
 
-        {/* Grid de categorías */}
-        {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-            {[...Array(12)].map((_, i) => (
-              <CategorySkeleton key={i} />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-            {categories.map((category) => (
-              <Link
-                key={category.id}
-                to={`/tienda?categoria=${category.id}`}
-                className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 text-center"
-              >
-                {/* Icono */}
-                <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
-                  {CATEGORY_ICONS[category.slug] || DefaultIcon}
+        {/* Carrusel de categorías */}
+        <div className="relative">
+          {/* Botón Anterior */}
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
+              aria-label="Anterior"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+
+          {/* Contenedor del carrusel */}
+          {loading ? (
+            <div className="flex gap-4 md:gap-6 overflow-hidden">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="flex-shrink-0 w-40 sm:w-48">
+                  <CategorySkeleton />
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              ref={scrollContainerRef}
+              className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {categories.map((category) => (
+                <Link
+                  key={category.id}
+                  to={`/tienda?categoria=${category.id}`}
+                  className="group bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 text-center flex-shrink-0 w-40 sm:w-48"
+                >
+                  {/* Icono */}
+                  <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+                    {CATEGORY_ICONS[category.slug] || DefaultIcon}
+                  </div>
 
-                {/* Nombre */}
-                <h3 className="font-semibold text-text group-hover:text-primary transition-colors text-sm md:text-base">
-                  {category.name}
-                </h3>
+                  {/* Nombre */}
+                  <h3 className="font-semibold text-text group-hover:text-primary transition-colors text-sm">
+                    {category.name}
+                  </h3>
 
-                {/* Cantidad */}
-                {category.count > 0 && (
-                  <p className="text-xs text-muted mt-1">
-                    {category.count} equipo{category.count !== 1 ? 's' : ''}
-                  </p>
-                )}
-              </Link>
-            ))}
-          </div>
-        )}
+                  {/* Cantidad */}
+                  {category.count > 0 && (
+                    <p className="text-xs text-muted mt-1">
+                      {category.count} equipo{category.count !== 1 ? 's' : ''}
+                    </p>
+                  )}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Botón Siguiente */}
+          {canScrollRight && (
+            <button
+              onClick={() => scroll('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
+              aria-label="Siguiente"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
+        </div>
 
         {/* CTA */}
         <div className="text-center mt-10">
