@@ -46,32 +46,24 @@ export const ROUTES = {
 // Menú principal
 export const MENU_ITEMS = [
   {
-    label: 'Arriendo',
-    href: ROUTES.ARRIENDO,
-    hasDropdown: true,
-    submenu: [
-      { label: 'Maquinaria Pesada', href: '/arriendo/maquinaria-pesada' },
-      { label: 'Equipos de Construcción', href: '/arriendo/equipos-construccion' },
-      { label: 'Transporte', href: '/arriendo/transporte' },
-    ],
-  },
-  {
-    label: 'Renting',
-    href: ROUTES.RENTING,
-    hasDropdown: true,
-    submenu: [
-      { label: 'Renting Permanente', href: '/renting/permanente' },
-      { label: 'Renting Operacional', href: '/renting/operacional' },
-    ],
-  },
-  {
-    label: 'Somos FLR',
-    href: ROUTES.SOMOS_FLR,
+    label: 'Inicio',
+    href: ROUTES.HOME,
     hasDropdown: false,
   },
   {
-    label: 'Sucursales',
-    href: ROUTES.SUCURSALES,
+    label: 'Productos',
+    href: ROUTES.PRODUCTOS,
+    hasDropdown: false,
+    isMegaMenu: true, // Mega menu con categorías
+  },
+  {
+    label: 'Nosotros',
+    href: ROUTES.NOSOTROS,
+    hasDropdown: false,
+  },
+  {
+    label: 'Contacto',
+    href: ROUTES.CONTACTO,
     hasDropdown: false,
   },
 ] as const;

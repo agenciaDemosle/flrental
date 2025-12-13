@@ -2,11 +2,13 @@
  * FL Rental - Header Component
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES, MENU_ITEMS, COUNTRIES } from '@/app/constants';
 import SearchModal from '@/components/modals/SearchModal';
 import LoginModal from '@/components/modals/LoginModal';
+import { getCategories, type WooCategory } from '@/services/woocommerce';
+import { getCategoryIcon } from '@/components/icons/CategoryIcons';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -14,8 +16,27 @@ export default function Header() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [categories, setCategories] = useState<WooCategory[]>([]);
 
   const currentCountry = COUNTRIES[0]; // Chile por defecto
+
+  // Cargar categorías para el mega menu
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const cats = await getCategories();
+        // Filtrar categorías padre y excluir "Uncategorized" y variantes
+        const excludedSlugs = ['uncategorized', 'sin-categorizar', 'sin-categoria'];
+        const parentCats = cats.filter(
+          (cat) => cat.parent === 0 && !excludedSlugs.includes(cat.slug.toLowerCase())
+        );
+        setCategories(parentCats);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    }
+    loadCategories();
+  }, []);
 
   return (
     <>
@@ -37,7 +58,7 @@ export default function Header() {
                 <div
                   key={item.label}
                   className="relative"
-                  onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.label)}
+                  onMouseEnter={() => (item.hasDropdown || item.isMegaMenu) && setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <Link
@@ -45,14 +66,53 @@ export default function Header() {
                     className="flex items-center gap-1 px-4 py-2 text-text hover:text-primary transition-colors font-medium"
                   >
                     {item.label}
-                    {item.hasDropdown && (
+                    {(item.hasDropdown || item.isMegaMenu) && (
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     )}
                   </Link>
 
-                  {/* Dropdown */}
+                  {/* Mega Menu - Productos */}
+                  {item.isMegaMenu && activeDropdown === item.label && categories.length > 0 && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] bg-white shadow-2xl rounded-lg py-6 px-8 z-[100] border border-gray-100">
+                      <div className="mb-4">
+                        <h3 className="text-lg font-bold text-text mb-1">Categorías de Productos</h3>
+                        <p className="text-sm text-muted">Explora nuestra flota de equipos especializados</p>
+                      </div>
+                      <div className="grid grid-cols-4 gap-4">
+                        {categories.map((category) => (
+                          <Link
+                            key={category.id}
+                            to={`${ROUTES.PRODUCTOS}?categoria=${category.slug}`}
+                            className="group flex flex-col items-center gap-2 p-4 rounded-lg hover:bg-primary/5 transition-colors"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <div className="w-12 h-12 flex items-center justify-center text-primary group-hover:text-primary-hover transition-colors">
+                              {getCategoryIcon(category.slug, { className: 'w-10 h-10' })}
+                            </div>
+                            <span className="text-xs text-center text-text group-hover:text-primary font-medium transition-colors">
+                              {category.name}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                      <div className="mt-6 pt-4 border-t border-gray-100">
+                        <Link
+                          to={ROUTES.PRODUCTOS}
+                          className="flex items-center justify-center gap-2 text-primary hover:text-primary-hover font-medium transition-colors"
+                          onClick={() => setActiveDropdown(null)}
+                        >
+                          Ver todos los productos
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Dropdown normal */}
                   {item.hasDropdown && item.submenu && activeDropdown === item.label && (
                     <div className="absolute top-full left-0 w-56 bg-white shadow-lg rounded-md py-2 z-[100]">
                       {item.submenu.map((subitem) => (
@@ -162,20 +222,6 @@ export default function Header() {
                   >
                     {item.label}
                   </Link>
-                  {item.hasDropdown && item.submenu && (
-                    <div className="pl-4 pb-2">
-                      {item.submenu.map((subitem) => (
-                        <Link
-                          key={subitem.label}
-                          to={subitem.href}
-                          className="block py-2 text-sm text-muted hover:text-primary transition-colors"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {subitem.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
               <Link
