@@ -71,7 +71,7 @@ export default function ProductsSection() {
             {products.map((product) => (
               <Link
                 key={product.id}
-                to={`/tienda/${product.id}`}
+                to={`/producto/${product.slug}`}
                 className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
               >
                 {/* Imagen del producto */}

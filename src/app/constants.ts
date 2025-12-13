@@ -20,6 +20,13 @@ export const WC_CONSUMER_KEY = import.meta.env.VITE_WC_CONSUMER_KEY || '';
 export const WC_CONSUMER_SECRET = import.meta.env.VITE_WC_CONSUMER_SECRET || '';
 export const GA4_ID = import.meta.env.VITE_GA4_ID || '';
 
+// WooCommerce API Config
+export const API_CONFIG = {
+  baseURL: API_URL,
+  consumerKey: WC_CONSUMER_KEY,
+  consumerSecret: WC_CONSUMER_SECRET,
+} as const;
+
 // Rutas
 export const ROUTES = {
   HOME: '/',
@@ -28,6 +35,7 @@ export const ROUTES = {
   SOMOS_FLR: '/somos-flr',
   SUCURSALES: '/sucursales',
   PRODUCTOS: '/productos',
+  PRODUCTO_DETALLE: '/producto/:slug',
   TIENDA: '/tienda',
   COTIZADOR: '/cotizador',
   NOSOTROS: '/nosotros',

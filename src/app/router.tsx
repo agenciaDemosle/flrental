@@ -12,6 +12,7 @@ import Layout from '@/components/layout/Layout';
 // Lazy pages
 const Home = lazy(() => import('@/pages/Home'));
 const Productos = lazy(() => import('@/pages/Productos'));
+const ProductoDetalle = lazy(() => import('@/pages/ProductoDetalle'));
 const Tienda = lazy(() => import('@/pages/Tienda'));
 const Cotizador = lazy(() => import('@/pages/Cotizador'));
 const Nosotros = lazy(() => import('@/pages/Nosotros'));
@@ -45,6 +46,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<PageLoader />}>
             <Productos />
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.PRODUCTO_DETALLE,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <ProductoDetalle />
           </Suspense>
         ),
       },
