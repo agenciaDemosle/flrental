@@ -16,14 +16,14 @@ export default function Home() {
       {/* Hero Banner / Carrusel */}
       <HeroBanner />
 
+      {/* Sección Productos Destacados */}
+      <ProductsSection />
+
       {/* Sección Arriendo de Maquinaria Pesada */}
       <ArriendoSection />
 
       {/* Sección Categorías de Productos */}
       <CategoriesSection />
-
-      {/* Sección Productos Destacados */}
-      <ProductsSection />
 
       {/* Sección Por Qué Elegirnos */}
       <WhyChooseUsSection />

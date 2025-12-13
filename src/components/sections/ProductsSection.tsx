@@ -24,23 +24,69 @@ function ProductSkeleton() {
 }
 
 export default function ProductsSection() {
-  const [products, setProducts] = useState<WooProduct[]>([]);
+  const [allProducts, setAllProducts] = useState<WooProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<WooProduct[]>([]);
+  const [categories, setCategories] = useState<Array<{ id: number; name: string; slug: string }>>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [displayCount, setDisplayCount] = useState(12);
   const [loading, setLoading] = useState(true);
 
+  // Cargar productos y categorías
   useEffect(() => {
-    async function loadProducts() {
+    async function loadData() {
       try {
-        // Traer los primeros 8 productos
-        const prods = await getProducts({ per_page: 8 });
-        setProducts(prods);
+        // Traer todos los productos
+        const prods = await getProducts({ per_page: 100 });
+        setAllProducts(prods);
+        setFilteredProducts(prods);
+
+        // Extraer categorías únicas (excluyendo "sin categorizar")
+        const uniqueCategories = new Map<number, { id: number; name: string; slug: string }>();
+        prods.forEach(product => {
+          product.categories?.forEach(cat => {
+            if (cat.slug !== 'sin-categorizar' && cat.slug !== 'uncategorized') {
+              uniqueCategories.set(cat.id, cat);
+            }
+          });
+        });
+
+        setCategories([...uniqueCategories.values()].sort((a, b) => a.name.localeCompare(b.name)));
       } catch (err) {
         console.error('Error cargando productos:', err);
       } finally {
         setLoading(false);
       }
     }
-    loadProducts();
+    loadData();
   }, []);
+
+  // Filtrar productos cuando cambian los filtros
+  useEffect(() => {
+    let filtered = [...allProducts];
+
+    // Filtrar por categoría
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(product =>
+        product.categories?.some(cat => cat.slug === selectedCategory)
+      );
+    }
+
+    // Filtrar por búsqueda
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.categories?.some(cat => cat.name.toLowerCase().includes(query))
+      );
+    }
+
+    setFilteredProducts(filtered);
+    setDisplayCount(12); // Reset al cambiar filtros
+  }, [selectedCategory, searchQuery, allProducts]);
+
+  const displayedProducts = filteredProducts.slice(0, displayCount);
+  const hasMore = displayCount < filteredProducts.length;
 
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-white">
@@ -51,24 +97,117 @@ export default function ProductsSection() {
           secondaryText="Equipos"
         />
 
-        <p className="text-center text-muted max-w-2xl mx-auto mt-4 mb-10">
+        <p className="text-center text-muted max-w-2xl mx-auto mt-4 mb-8">
           Explora nuestra flota de equipos de última generación, listos para impulsar tu proyecto.
         </p>
+
+        {/* Buscador */}
+        <div className="max-w-xl mx-auto mb-8">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Buscar equipos por nombre o categoría..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-3 pl-12 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+            />
+            <svg
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* Filtros de categoría */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <button
+            onClick={() => setSelectedCategory('all')}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              selectedCategory === 'all'
+                ? 'bg-primary text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Todos ({allProducts.length})
+          </button>
+          {categories.map((category) => {
+            const count = allProducts.filter(p =>
+              p.categories?.some(c => c.id === category.id)
+            ).length;
+            return (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.slug)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  selectedCategory === category.slug
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {category.name} ({count})
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Resultados */}
+        {filteredProducts.length > 0 && (
+          <p className="text-center text-sm text-muted mb-6">
+            Mostrando {displayedProducts.length} de {filteredProducts.length} equipos
+          </p>
+        )}
 
         {/* Grid de productos */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
               <ProductSkeleton key={i} />
             ))}
           </div>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted">No hay productos disponibles en este momento.</p>
+            <div className="bg-gray-50 rounded-lg p-8 max-w-md mx-auto">
+              <svg
+                className="w-16 h-16 mx-auto text-gray-300 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-text font-medium mb-2">No se encontraron equipos</p>
+              <p className="text-muted text-sm mb-4">
+                Intenta con otros términos de búsqueda o selecciona otra categoría
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('all');
+                }}
+                className="text-primary hover:underline text-sm font-medium"
+              >
+                Limpiar filtros
+              </button>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {displayedProducts.map((product) => (
               <Link
                 key={product.id}
                 to={`/producto/${product.slug}`}
@@ -135,20 +274,23 @@ export default function ProductsSection() {
               </Link>
             ))}
           </div>
-        )}
 
-        {/* CTA */}
-        <div className="text-center mt-10">
-          <Link
-            to="/tienda"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white font-medium px-8 py-3 rounded-lg transition-colors"
-          >
-            Ver todos los equipos
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
-        </div>
+          {/* Botón Ver Más */}
+          {hasMore && (
+            <div className="text-center mt-10">
+              <button
+                onClick={() => setDisplayCount(prev => prev + 12)}
+                className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-text font-medium px-8 py-3 rounded-lg transition-colors"
+              >
+                Ver más equipos
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+          )}
+        </>
+        )}
       </div>
     </section>
   );
