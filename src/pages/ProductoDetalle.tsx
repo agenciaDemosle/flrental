@@ -56,6 +56,26 @@ export default function ProductoDetalle() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
 
+  // Función para descargar archivo
+  const handleDownload = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Error descargando archivo:', error);
+      // Fallback: abrir en nueva pestaña
+      window.open(url, '_blank');
+    }
+  };
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -252,40 +272,57 @@ export default function ProductoDetalle() {
                 </p>
                 <div className="space-y-2">
                   {product.downloads.map((download) => (
-                    <a
-                      key={download.id}
-                      href={download.file}
-                      download
-                      className="flex items-center gap-3 bg-white hover:bg-white/90 text-primary font-medium px-4 py-3 rounded-lg transition-all group"
-                    >
-                      <svg
-                        className="w-5 h-5 flex-shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    <div key={download.id} className="flex gap-2">
+                      {/* Botón Ver (abre en nueva pestaña) */}
+                      <a
+                        href={download.file}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-white/90 text-primary font-medium px-4 py-3 rounded-lg transition-all group"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                      <span className="flex-1">{download.name}</span>
-                      <svg
-                        className="w-5 h-5 flex-shrink-0 transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                        <svg
+                          className="w-5 h-5 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                        <span className="text-sm">Ver</span>
+                      </a>
+
+                      {/* Botón Descargar */}
+                      <button
+                        onClick={() => handleDownload(download.file, `${download.name}.pdf`)}
+                        className="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-white/90 text-primary font-medium px-4 py-3 rounded-lg transition-all group"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </a>
+                        <svg
+                          className="w-5 h-5 flex-shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                        <span className="text-sm">Descargar</span>
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
