@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ROUTES, MENU_ITEMS, COUNTRIES } from '@/app/constants';
+import { ROUTES, MENU_ITEMS } from '@/app/constants';
 import SearchModal from '@/components/modals/SearchModal';
 import LoginModal from '@/components/modals/LoginModal';
 import { getCategories, type WooCategory } from '@/services/woocommerce';
@@ -14,11 +14,8 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [categories, setCategories] = useState<WooCategory[]>([]);
-
-  const currentCountry = COUNTRIES[0]; // Chile por defecto
 
   // Cargar categorías para el mega menu
   useEffect(() => {
@@ -176,35 +173,6 @@ export default function Header() {
               >
                 Cotizador
               </Link>
-
-              {/* Selector de país */}
-              <div className="relative">
-                <button
-                  onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-text hover:text-primary transition-colors"
-                >
-                  <span className="text-lg">{currentCountry.flag}</span>
-                  <span className="hidden sm:inline">Portal {currentCountry.code}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {countryDropdownOpen && (
-                  <div className="absolute top-full right-0 w-48 bg-white shadow-lg rounded-md py-2 z-[100]">
-                    {COUNTRIES.map((country) => (
-                      <a
-                        key={country.code}
-                        href={country.url}
-                        className="flex items-center gap-3 px-4 py-2 text-sm text-text hover:bg-surface hover:text-primary transition-colors"
-                      >
-                        <span className="text-lg">{country.flag}</span>
-                        <span>{country.name}</span>
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </div>
