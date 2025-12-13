@@ -3,8 +3,9 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ROUTES, API_CONFIG } from '@/app/constants';
+import { useQuote } from '@/context/QuoteContext';
 import axios from 'axios';
 
 interface ProductImage {
@@ -52,9 +53,33 @@ interface Product {
 
 export default function ProductoDetalle() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const { addItem } = useQuote();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
+
+  // Función para agregar al cotizador
+  const handleAddToQuote = () => {
+    if (!product) return;
+
+    // Obtener la primera categoría (excluyendo "sin categorizar")
+    const category = product.categories
+      .filter((cat) => cat.slug !== 'sin-categorizar')
+      .map((cat) => cat.name)[0] || 'Sin categoría';
+
+    // Agregar producto al cotizador
+    addItem({
+      id: product.id,
+      name: product.name,
+      image: product.images[0]?.src || '',
+      price: '0', // Los precios son a convenir
+      category: category,
+    });
+
+    // Navegar al cotizador
+    navigate(ROUTES.COTIZADOR);
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -294,12 +319,12 @@ export default function ProductoDetalle() {
 
             {/* Botones de acción */}
             <div className="flex flex-col sm:flex-row gap-3 mb-8">
-              <Link
-                to={ROUTES.COTIZADOR}
+              <button
+                onClick={handleAddToQuote}
                 className="flex-1 bg-primary hover:bg-primary-hover text-white font-medium py-3 px-6 rounded-lg text-center transition-colors"
               >
                 Solicitar Cotización
-              </Link>
+              </button>
               <Link
                 to={ROUTES.CONTACTO}
                 className="flex-1 bg-white hover:bg-gray-50 text-primary border-2 border-primary font-medium py-3 px-6 rounded-lg text-center transition-colors"
