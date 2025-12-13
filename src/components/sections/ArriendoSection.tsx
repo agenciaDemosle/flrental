@@ -126,20 +126,6 @@ export default function ArriendoSection() {
             </Link>
           ))}
         </div>
-
-        {/* Cobertura Nacional */}
-        <div className="mt-12 bg-gradient-to-r from-secondary/5 via-secondary/10 to-secondary/5 rounded-2xl p-8 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span className="font-bold text-secondary text-lg">Cobertura Nacional</span>
-          </div>
-          <p className="text-text font-medium">
-            Con sucursales en: {BRANCHES.join(' • ')}
-          </p>
-        </div>
       </div>
     </section>
   );
